@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { collection, getDocs } from 'firebase/firestore';
-import { firestore } from '../firebase';
-import { useNavigate } from 'react-router-dom';
-import '../styles/UserDashboard.css'; // Import the CSS file
+import { collection, getDocs, doc, writeBatch } from 'firebase/firestore';
+import { firestore, auth } from '../firebase';
+import '../styles/UserDashboard.css';
 
 const UserDashboard = () => {
   const [mcqs, setMcqs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const navigate = useNavigate();
+  const [responses, setResponses] = useState({});
 
   useEffect(() => {
     const fetchMCQs = async () => {
@@ -27,6 +26,45 @@ const UserDashboard = () => {
     fetchMCQs();
   }, []);
 
+  const handleOptionChange = (mcqId, optionId) => {
+    setResponses(prevResponses => ({
+      ...prevResponses,
+      [mcqId]: prevResponses[mcqId] === optionId ? null : optionId
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const userId = auth.currentUser ? auth.currentUser.uid : null;
+    const attemptedAt = new Date();
+
+    if (!userId) {
+      setError('User not authenticated.');
+      return;
+    }
+
+    const results = Object.entries(responses).map(([mcqId, selectedOptionId]) => ({
+      mcqId,
+      selectedOptionId,
+      userId,
+      attemptedAt,
+    }));
+
+    try {
+      const batch = writeBatch(firestore);
+      results.forEach(result => {
+        const resultRef = doc(collection(firestore, 'results'));
+        batch.set(resultRef, result);
+      });
+      await batch.commit();
+      alert('Responses submitted successfully!');
+    } catch (error) {
+      console.error("Error submitting responses: ", error);
+      setError('Failed to submit responses. Please try again.');
+    }
+  };
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -35,26 +73,33 @@ const UserDashboard = () => {
     return <div style={{ color: 'red' }}>{error}</div>;
   }
 
-  const handleMCQClick = (id) => {
-    navigate(`/mcq/${id}`);
-  };
-
   return (
     <div className="container user-dashboard">
       <h1>User Dashboard</h1>
-      <h2>Available MCQs</h2>
-      <ul>
+      <form onSubmit={handleSubmit}>
         {mcqs.map(mcq => (
-          <li key={mcq.id} onClick={() => handleMCQClick(mcq.id)} className="mcq-item">
+          <div key={mcq.id} className="mcq-item">
             <h3>{mcq.question}</h3>
             <ul>
               {mcq.options.map((option, index) => (
-                <li key={index}>{option.text}</li>
+                <li key={option.optionId}>
+                  <label>
+                    <input
+                      type="radio"
+                      name={`mcq-${mcq.id}`}
+                      value={option.optionId}
+                      checked={responses[mcq.id] === option.optionId}
+                      onChange={() => handleOptionChange(mcq.id, option.optionId)}
+                    />
+                    {option.text}
+                  </label>
+                </li>
               ))}
             </ul>
-          </li>
+          </div>
         ))}
-      </ul>
+        <button type="submit">Submit All</button>
+      </form>
     </div>
   );
 };

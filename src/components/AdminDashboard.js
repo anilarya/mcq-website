@@ -76,7 +76,7 @@ const AdminDashboard = () => {
   return (
     <div className="container admin-dashboard">
       <h1>Admin Dashboard</h1>
-      <MCQForm onSubmit={editMCQ ? handleUpdate : handleAdd} initialData={editMCQ} />
+      <MCQForm onSubmit={editMCQ ? (mcqDoc) => handleUpdate(editMCQ.id, mcqDoc) : handleAdd} initialData={editMCQ} />
       <h2>MCQs</h2>
       <ul>
         {mcqs.map(mcq => (

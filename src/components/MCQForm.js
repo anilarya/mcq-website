@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'; 
-import {   auth } from '../firebase';
+import {  auth } from '../firebase';
 import '../styles/MCQForm.css';
 
 const MCQForm = ({ onSubmit, initialData }) => {
@@ -46,7 +46,7 @@ const MCQForm = ({ onSubmit, initialData }) => {
     };
 
     try {
-      await onSubmit(initialData ? initialData.id : null, mcqDoc);
+      await onSubmit(mcqDoc);
       setQuestion('');
       setOptions([
         { optionId: '1', text: '', isCorrect: false },

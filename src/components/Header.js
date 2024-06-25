@@ -1,6 +1,6 @@
 import React from 'react';
 import { auth, signInWithGoogle } from '../firebase';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import '../styles/Header.css'; // Import the CSS file for header styling
 
 const Header = ({ user }) => {
@@ -25,7 +25,14 @@ const Header = ({ user }) => {
         <div className="user-actions">
           {user ? (
             <>
+              {user.email === 'anilarya280@gmail.com' && (
+                <>
+                  <Link to="/admin">Admin Dashboard</Link>
+                  <Link to="/results">Results</Link>
+                </>
+              )}
               <span className="user-details">Hello, {user.email}</span>
+             
               <button onClick={handleLogout}>Logout</button>
             </>
           ) : (

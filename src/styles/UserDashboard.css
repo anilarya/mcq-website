@@ -16,6 +16,4 @@
   transition: background 0.3s ease;
 }
 
-.mcq-item:hover {
-  background: rgba(255, 255, 255, 0.3);
-}
+ 
