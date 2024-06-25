@@ -3,6 +3,7 @@ import { collection, getDocs, deleteDoc, doc, updateDoc, addDoc } from 'firebase
 import { firestore } from '../firebase';
 import MCQForm from './MCQForm';
 import '../styles/AdminDashboard.css';
+import SlButton from '@shoelace-style/shoelace/dist/react/button';
 
 const AdminDashboard = () => {
   const [mcqs, setMcqs] = useState([]);
@@ -89,8 +90,16 @@ const AdminDashboard = () => {
                 </li>
               ))}
             </ul>
-            <button onClick={() => handleEdit(mcq)}>Edit</button>
-            <button onClick={() => handleDelete(mcq.id)}>Delete</button>
+             
+            <div style={{ display: 'flex', gap: '10px' }}>
+                <SlButton variant="warning" onClick={() => handleEdit(mcq)}>
+                    Edit
+                </SlButton>
+
+                <SlButton variant="warning" onClick={() => handleDelete(mcq.id)}>
+                    Delete
+                </SlButton>
+            </div>
           </li>
         ))}
       </ul>

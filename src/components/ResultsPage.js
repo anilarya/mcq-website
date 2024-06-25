@@ -3,6 +3,7 @@ import { collection, getDocs } from 'firebase/firestore';
 import { firestore } from '../firebase';
 import { CSVLink } from 'react-csv';
 import '../styles/ResultsPage.css';
+// import SlButton from '@shoelace-style/shoelace/dist/react/button';
 
 const ResultsPage = () => {
   const [groupedResults, setGroupedResults] = useState([]);
@@ -101,7 +102,7 @@ const ResultsPage = () => {
 
   return (
     <div className="container results-page">
-      <h1>Results</h1>
+      <h1>Results</h1> 
       <CSVLink data={csvData} filename="results.csv" className="btn btn-primary" target="_blank">
         Download Results as CSV
       </CSVLink>

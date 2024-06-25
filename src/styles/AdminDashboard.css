@@ -4,4 +4,8 @@
 .admin-dashboard h1 {
   margin-bottom: 20px;
 }
+
+.admin-dashboard{
+    background: linear-gradient(to right, #6a11cb, #2575fc);
+}
  

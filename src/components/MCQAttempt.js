@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { doc, getDoc, addDoc, collection } from 'firebase/firestore';
 import { firestore, auth } from '../firebase';
 import '../styles/MCQAttempt.css';
+import SlButton from '@shoelace-style/shoelace/dist/react/button';
 
 const MCQAttempt = () => {
   const { id } = useParams();
@@ -103,8 +104,10 @@ const MCQAttempt = () => {
             />
             {option.text}
           </div>
-        ))}
-        <button type="submit">Submit</button>
+        ))} 
+        <SlButton variant="warning" type="submit" disabled={loading}>
+            Submit
+        </SlButton>
       </form>
     </div>
   );

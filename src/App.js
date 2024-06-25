@@ -10,7 +10,10 @@ import ResultsPage from './components/ResultsPage';
 import Header from './components/Header'; // Import the Header component
 import './styles/common.css'; // Import common styles
 import './App.css'; // Import the App layout styles
- 
+import '@shoelace-style/shoelace/dist/themes/light.css';
+import { setBasePath } from '@shoelace-style/shoelace/dist/utilities/base-path';
+
+setBasePath('https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.15.1/cdn/');
 
 const AppContent = () => {
   const [loading, setLoading] = useState(true);

@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { collection, getDocs, query, where, setDoc, doc } from 'firebase/firestore';
 import { firestore, auth } from '../firebase';
 import '../styles/UserDashboard.css';
-
+import SlButton from '@shoelace-style/shoelace/dist/react/button';
+// import SlRadio from '@shoelace-style/shoelace/dist/react/radio';
 const UserDashboard = () => {
   const [mcqs, setMcqs] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -95,12 +96,22 @@ const UserDashboard = () => {
                     />
                     {option.text}
                   </label>
+
+                  {/* <SlRadio name={`mcq-${mcq.id}`}
+                    value={option.optionId}
+                    checked={responses[mcq.id] === option.optionId}
+                    onChange={() => handleOptionChange(mcq.id, option.optionId)}
+                  >
+                    {option.text}
+                 </SlRadio> */}
                 </li>
               ))}
             </ul>
           </div>
-        ))}
-        <button type="submit">Submit All</button>
+        ))} 
+        <SlButton variant="warning" type="submit" disabled={loading}>
+            Submit All
+        </SlButton>
       </form>
     </div>
   );
