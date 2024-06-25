@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { collection, getDocs  } from 'firebase/firestore';
+import { collection, getDocs } from 'firebase/firestore';
 import { firestore } from '../firebase';
+import { CSVLink } from 'react-csv';
 import '../styles/ResultsPage.css';
 
 const ResultsPage = () => {
-  const [results, setResults] = useState([]);
+  const [groupedResults, setGroupedResults] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [csvData, setCsvData] = useState([]);
 
   useEffect(() => {
     const fetchResults = async () => {
@@ -15,7 +17,6 @@ const ResultsPage = () => {
         const resultsSnapshot = await getDocs(resultsCollection);
         const resultsData = resultsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
-        // Fetch all MCQs and Users data
         const mcqsCollection = collection(firestore, 'mcqs');
         const mcqsSnapshot = await getDocs(mcqsCollection);
         const mcqsData = mcqsSnapshot.docs.reduce((acc, doc) => {
@@ -30,21 +31,55 @@ const ResultsPage = () => {
           return acc;
         }, {});
 
-        // Merge results with user and MCQ data
-        const mergedResults = resultsData.map(result => {
+        const groupedData = resultsData.reduce((acc, result) => {
           const mcq = mcqsData[result.mcqId];
           const user = usersData[result.userId];
           const correct = mcq ? mcq.options.find(option => option.optionId === result.selectedOptionId).isCorrect : false;
 
-          return {
+          const resultWithDetails = {
             ...result,
             userName: user ? user.name : 'Unknown',
-            userEmail : user ? user.email: "NA",
+            userEmail: user ? user.email : 'Unknown',
             correct: correct ? 'Correct' : 'Incorrect',
           };
+
+          if (!acc[result.userId]) {
+            acc[result.userId] = {
+              userName: resultWithDetails.userName,
+              userEmail: resultWithDetails.userEmail,
+              correctCount: 0,
+              results: [],
+            };
+          }
+
+          if (correct) {
+            acc[result.userId].correctCount += 1;
+          }
+
+          acc[result.userId].results.push(resultWithDetails);
+          return acc;
+        }, {});
+
+        const sortedGroupedData = Object.values(groupedData).sort((a, b) => b.correctCount - a.correctCount);
+
+        setGroupedResults(sortedGroupedData);
+
+        const csv = [];
+        csv.push(['User Name', 'Email', 'MCQ ID', 'Selected Option', 'Correct/Incorrect', 'Attempted At']);
+        sortedGroupedData.forEach(userResults => {
+          userResults.results.forEach(result => {
+            csv.push([
+              userResults.userName,
+              userResults.userEmail,
+              result.mcqId,
+              result.selectedOptionId,
+              result.correct,
+              new Date(result.attemptedAt.seconds * 1000).toLocaleString()
+            ]);
+          });
         });
 
-        setResults(mergedResults);
+        setCsvData(csv);
       } catch (error) {
         console.error("Error fetching results: ", error);
         setError('Failed to load results. Please try again.');
@@ -67,30 +102,35 @@ const ResultsPage = () => {
   return (
     <div className="container results-page">
       <h1>Results</h1>
-      <table>
-        <thead>
-          <tr>
-            <th>User Name</th>
-            <th>Email</th>
-            <th>MCQ ID</th>
-            <th>Answer</th>
-            <th>Correct/Incorrect</th>
-            <th>Attempted At</th>
-          </tr>
-        </thead>
-        <tbody>
-          {results.map((result, index) => (
-            <tr key={index}>
-              <td>{result.userName}</td>
-              <td>{result.userEmail}</td>
-              <td>{result.mcqId}</td>
-              <td>{result.selectedOptionId}</td>
-              <td>{result.correct}</td>
-              <td>{new Date(result.attemptedAt.seconds * 1000).toLocaleString()}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <CSVLink data={csvData} filename="results.csv" className="btn btn-primary" target="_blank">
+        Download Results as CSV
+      </CSVLink>
+      {groupedResults.map((userResults, index) => (
+        <div key={index} className="user-results">
+          <h2>{userResults.userName} ({userResults.userEmail})</h2>
+          <h3>Total Correct Answers: {userResults.correctCount}</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>MCQ ID</th>
+                <th>Answer</th>
+                <th>Correct/Incorrect</th>
+                <th>Attempted At</th>
+              </tr>
+            </thead>
+            <tbody>
+              {userResults.results.map((result, index) => (
+                <tr key={index}>
+                  <td>{result.mcqId}</td>
+                  <td>{result.selectedOptionId}</td>
+                  <td>{result.correct}</td>
+                  <td>{new Date(result.attemptedAt.seconds * 1000).toLocaleString()}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ))}
     </div>
   );
 };

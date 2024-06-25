@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { collection, getDocs, doc, writeBatch } from 'firebase/firestore';
+import { collection, getDocs, query, where, setDoc, doc } from 'firebase/firestore';
 import { firestore, auth } from '../firebase';
 import '../styles/UserDashboard.css';
 
@@ -37,27 +37,29 @@ const UserDashboard = () => {
     e.preventDefault();
 
     const userId = auth.currentUser ? auth.currentUser.uid : null;
+    const userEmail = auth.currentUser ? auth.currentUser.email : null;
     const attemptedAt = new Date();
 
-    if (!userId) {
+    if (!userId || !userEmail) {
       setError('User not authenticated.');
       return;
     }
 
-    const results = Object.entries(responses).map(([mcqId, selectedOptionId]) => ({
-      mcqId,
-      selectedOptionId,
-      userId,
-      attemptedAt,
-    }));
-
     try {
-      const batch = writeBatch(firestore);
-      results.forEach(result => {
-        const resultRef = doc(collection(firestore, 'results'));
-        batch.set(resultRef, result);
-      });
-      await batch.commit();
+      for (const [mcqId, selectedOptionId] of Object.entries(responses)) {
+        if (selectedOptionId !== null) {
+          const q = query(collection(firestore, 'results'), where('userId', '==', userId), where('mcqId', '==', mcqId));
+          const querySnapshot = await getDocs(q);
+
+          if (!querySnapshot.empty) {
+            const docRef = querySnapshot.docs[0].ref;
+            await setDoc(docRef, { selectedOptionId, attemptedAt }, { merge: true });
+          } else {
+            const resultDocRef = doc(collection(firestore, 'results'));
+            await setDoc(resultDocRef, { userId, email: userEmail, mcqId, selectedOptionId, attemptedAt });
+          }
+        }
+      }
       alert('Responses submitted successfully!');
     } catch (error) {
       console.error("Error submitting responses: ", error);
