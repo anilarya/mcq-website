@@ -1,0 +1,16 @@
+@import './common.css';
+
+/* Styles specific to the login page */
+.login-page button {
+  background: #2575fc;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.login-page button:hover {
+  background: #6a11cb;
+}

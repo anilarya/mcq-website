@@ -1,0 +1,11 @@
+@import './common.css';
+
+/* Styles specific to the MCQ Attempt page */
+.mcq-attempt ul li {
+  display: flex;
+  align-items: center;
+}
+
+.mcq-attempt input[type="checkbox"] {
+  margin-right: 10px;
+}

@@ -1,0 +1,25 @@
+@import './common.css';
+
+/* Styles specific to the MCQ Form */
+.mcq-form input[type="text"], .mcq-form textarea {
+  width: 80%;
+  padding: 10px;
+  margin: 10px 0;
+  border: none;
+  border-radius: 5px;
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.mcq-form button {
+  background: #2575fc;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.mcq-form button:hover {
+  background: #6a11cb;
+}

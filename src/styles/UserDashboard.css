@@ -1,0 +1,21 @@
+@import './common.css';
+
+/* Additional styles specific to User Dashboard */
+.user-dashboard {
+  width: 50vw; /* Cover half of the viewport width */
+  margin: 0 auto; /* Center align */
+  margin-top: 20px; /* Margin to avoid overlap with the header */
+}
+
+.user-dashboard h1 {
+  margin-bottom: 20px;
+}
+
+.mcq-item {
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.mcq-item:hover {
+  background: rgba(255, 255, 255, 0.3);
+}

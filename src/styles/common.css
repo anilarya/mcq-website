@@ -1,0 +1,37 @@
+/* Apply a nice background to the whole page */
+body {
+    background: linear-gradient(to right, #6a11cb, #2575fc);
+    margin: 0;
+    font-family: Arial, sans-serif;
+    color: white;
+    overflow: hidden;
+    height: 100vh;
+  }
+  
+  /* Center align the main container */
+  .container {
+    text-align :left;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    margin: auto;
+    overflow-y: auto;
+  }
+  
+  h1, h2, h3, h4 {
+    color: white;
+  }
+  
+  ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  ul li {
+    background: rgba(255, 255, 255, 0.2);
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 5px;
+  }
+  

@@ -1,0 +1,7 @@
+@import './common.css';
+
+/* Additional styles specific to Admin Dashboard */
+.admin-dashboard h1 {
+  margin-bottom: 20px;
+}
+ 
