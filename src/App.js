@@ -6,6 +6,7 @@ import LoginPage from './components/LoginPage';
 import AdminDashboard from './components/AdminDashboard';
 import UserDashboard from './components/UserDashboard';
 import MCQAttempt from './components/MCQAttempt';
+import ThankYouPage from './components/ThankYouPage';
 import ResultsPage from './components/ResultsPage';
 import Header from './components/Header'; // Import the Header component
 import './styles/common.css'; // Import common styles
@@ -57,6 +58,7 @@ const AppContent = () => {
           <Route path="/user" element={user && user.email !== 'anilarya280@gmail.com' ? <UserDashboard /> : <Navigate to="/login" />} />
           <Route path="/results" element={user && user.email === 'anilarya280@gmail.com' ? <ResultsPage /> : <Navigate to="/login" />} />
           <Route path="/mcq/:id" element={user ? <MCQAttempt /> : <Navigate to="/login" />} />
+          <Route path="/thank-you" element={<ThankYouPage />} />
           <Route path="/" element={<Navigate to={user ? (user.email === 'anilarya280@gmail.com' ? '/admin' : '/user') : '/login'} />} />
           <Route path="*" element={<Navigate to="/login" />} />
         </Routes>

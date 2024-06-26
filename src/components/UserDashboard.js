@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { collection, getDocs, query, where, setDoc, doc } from 'firebase/firestore';
 import { firestore, auth } from '../firebase';
-import '../styles/UserDashboard.css';
+import '../styles/UserDashboard.css'; 
 import SlButton from '@shoelace-style/shoelace/dist/react/button';
-// import SlRadio from '@shoelace-style/shoelace/dist/react/radio';
+
 const UserDashboard = () => {
   const [mcqs, setMcqs] = useState([]);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [responses, setResponses] = useState({});
@@ -68,6 +69,14 @@ const UserDashboard = () => {
     }
   };
 
+  const handleNext = () => {
+    setCurrentQuestionIndex((prevIndex) => (prevIndex + 1) % mcqs.length);
+  };
+
+  const handlePrevious = () => {
+    setCurrentQuestionIndex((prevIndex) => (prevIndex - 1 + mcqs.length) % mcqs.length);
+  };
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -76,42 +85,47 @@ const UserDashboard = () => {
     return <div style={{ color: 'red' }}>{error}</div>;
   }
 
+  const currentMcq = mcqs[currentQuestionIndex];
+
   return (
     <div className="container user-dashboard">
       <h1>User Dashboard</h1>
       <form onSubmit={handleSubmit}>
-        {mcqs.map(mcq => (
-          <div key={mcq.id} className="mcq-item">
-            <h3>{mcq.question}</h3>
+        {currentMcq && (
+          <div key={currentMcq.id} className="mcq-item">
+            <h3>{currentMcq.question}</h3>
             <ul>
-              {mcq.options.map((option, index) => (
+              {currentMcq.options.map((option, index) => (
                 <li key={option.optionId}>
                   <label>
                     <input
                       type="radio"
-                      name={`mcq-${mcq.id}`}
+                      name={`mcq-${currentMcq.id}`}
                       value={option.optionId}
-                      checked={responses[mcq.id] === option.optionId}
-                      onChange={() => handleOptionChange(mcq.id, option.optionId)}
+                      checked={responses[currentMcq.id] === option.optionId}
+                      onChange={() => handleOptionChange(currentMcq.id, option.optionId)}
                     />
                     {option.text}
                   </label>
-
-                  {/* <SlRadio name={`mcq-${mcq.id}`}
-                    value={option.optionId}
-                    checked={responses[mcq.id] === option.optionId}
-                    onChange={() => handleOptionChange(mcq.id, option.optionId)}
-                  >
-                    {option.text}
-                 </SlRadio> */}
                 </li>
               ))}
             </ul>
           </div>
-        ))} 
-        <SlButton variant="warning" type="submit" disabled={loading}>
-            Submit All
-        </SlButton>
+        )}
+        <div className="navigation-buttons">
+          <SlButton variant="danger" type="button" onClick={handlePrevious} disabled={currentQuestionIndex === 0}>
+            Previous
+          </SlButton>
+          {currentQuestionIndex < mcqs.length - 1 ? (
+            <SlButton variant="warning" type="button" onClick={handleNext}>
+              Next
+            </SlButton>
+          ) : (
+            <SlButton variant="success" type="submit">
+              Submit
+            </SlButton>
+          )}
+        </div>
       </form>
     </div>
   );

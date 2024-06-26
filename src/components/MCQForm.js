@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'; 
-import {  auth } from '../firebase';
+import React, { useState, useEffect } from 'react';
+import { auth } from '../firebase';
 import '../styles/MCQForm.css';
 import SlCheckbox from '@shoelace-style/shoelace/dist/react/checkbox';
 import SlButton from '@shoelace-style/shoelace/dist/react/button';
@@ -77,7 +77,7 @@ const MCQForm = ({ onSubmit, initialData }) => {
           required
         />
         {options.map((option, index) => (
-          <div key={option.optionId}>
+          <div key={option.optionId} className="option-container">
             <input
               type="text"
               value={option.text}
@@ -85,16 +85,17 @@ const MCQForm = ({ onSubmit, initialData }) => {
               placeholder={`Option ${index + 1}`}
               required
               style={{ marginRight: '10px' }}
-            /> 
+            />
             <SlCheckbox
-                checked={option.isCorrect} 
-                onChange={(e) => handleOptionChange(index, 'isCorrect', e.target.checked)}>
-                    Correct
+              checked={option.isCorrect}
+              onSlChange={(e) => handleOptionChange(index, 'isCorrect', e.target.checked)}
+            >
+              Correct
             </SlCheckbox>
           </div>
-        ))} 
+        ))}
         <SlButton variant="warning" type="submit" disabled={loading}>
-            {loading ? 'Submitting...' : initialData ? 'Update MCQ' : 'Create MCQ'}
+          {loading ? 'Submitting...' : initialData ? 'Update MCQ' : 'Create MCQ'}
         </SlButton>
         {error && <p style={{ color: 'red' }}>{error}</p>}
       </form>
