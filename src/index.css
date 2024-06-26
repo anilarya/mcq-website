@@ -1,4 +1,8 @@
 body {
+  background: url("https://i.pinimg.com/originals/64/41/61/644161b5ce15397473f2c4a49620ee8f.gif");
+  background-repeat: repeat;
+  background-position: center center;
+  background-size: auto 53%;
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',

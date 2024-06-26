@@ -21,7 +21,7 @@ const Header = ({ user }) => {
   return (
     <div className="header">
       <div className="header-content">
-        <h1 className="app-name">Mox Choice</h1>
+        <h1 className="app-name">Yogic Quiz</h1>
         <div className="user-actions">
           {user ? (
             <>

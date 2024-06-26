@@ -1,16 +1,20 @@
-@import './common.css';
-
-/* Styles specific to the login page */
-.login-page button {
-  background: #2575fc;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background 0.3s ease;
-}
-
-.login-page button:hover {
-  background: #6a11cb;
-}
+.container .login-page{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 30vh;  
+    flex-direction: column; /* Arrange items in a column */
+    text-align: center; /* Center the text */
+  }
+  
+  .login-page h1 {
+    margin-bottom: 20px; /* Add some space between the heading and the button */
+  }
+  
+  .login-page button {
+    padding: 10px 20px; /* Add some padding for a better look */
+    font-size: 16px; /* Increase font size for better readability */
+    cursor: pointer; /* Change cursor to pointer on hover */
+  }
+ 
+  

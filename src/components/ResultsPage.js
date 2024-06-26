@@ -102,10 +102,10 @@ const ResultsPage = () => {
 
   return (
     <div className="container results-page">
-      <h1>Results</h1> 
-      <CSVLink data={csvData} filename="results.csv" className="btn btn-primary" target="_blank">
-        Download Results as CSV
-      </CSVLink>
+      <h1>Results</h1>  
+      <CSVLink data={csvData} filename="results.csv" className="btn btn-secondary" target="_blank">
+      <h2><div className='text-color'>Download Results as CSV</div></h2>
+      </CSVLink> 
       {groupedResults.map((userResults, index) => (
         <div key={index} className="user-results">
           <h2>{userResults.userName} ({userResults.userEmail})</h2>
