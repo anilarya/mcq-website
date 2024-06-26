@@ -1,10 +1,11 @@
-.container .login-page{
+.login-page{
     display: flex;
     justify-content: center;
     align-items: center;
     height: 30vh;  
     flex-direction: column; /* Arrange items in a column */
     text-align: center; /* Center the text */
+    background: linear-gradient(to right, #ec9696, #9ad78c);
   }
   
   .login-page h1 {

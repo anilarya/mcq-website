@@ -1,5 +1,5 @@
 import React from 'react';
-
+import '../styles/ThankYouPage.css'; 
 const ThankYouPage = () => {
   return (
     <div className="container thank-you-page">
