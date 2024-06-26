@@ -16,10 +16,43 @@
   transition: background 0.3s ease;
 }
 
-
 .navigation-buttons {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+/* Media Queries for Responsive Design */
+@media (max-width: 768px) {
+  .user-dashboard {
+    width: 80vw; /* Adjust width for tablet */
+    padding: 10px;
   }
- 
+
+  .navigation-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .navigation-buttons sl-button {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .user-dashboard {
+    width: 90vw; /* Adjust width for mobile */
+    padding: 10px;
+  }
+
+  .navigation-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .navigation-buttons sl-button {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}

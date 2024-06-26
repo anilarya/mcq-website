@@ -1,55 +1,93 @@
+@import './common.css';
+
 .header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 99%;
-    background: linear-gradient(to right, #220146, #0b45a8);
-    color: white;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
-    z-index: 1000;
-    box-shadow: 0px 8px 11px rgba(236, 7, 7, 0.18)
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%; /* Change to 100% for full width */
+  background: linear-gradient(to right, #220146, #0b45a8);
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  z-index: 1000;
+  box-shadow: 0px 8px 11px rgba(236, 7, 7, 0.18);
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.app-name {
+  margin: 0;
+  font-size: 1.5em; /* Adjust font size */
+}
+
+.user-actions {
+  display: flex;
+  align-items: center;
+}
+
+.user-actions span {
+  margin-right: 20px;
+}
+
+.user-actions a,
+.user-actions button {
+  color: white;
+  text-decoration: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 10px 20px;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+.user-actions a:hover,
+.user-actions button:hover {
+  background-color: #555;
+}
+
+.user-actions a {
+  margin-right: 10px;
+}
+
+/* Media Queries for Responsive Design */
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    padding: 10px;
   }
-  
+
   .header-content {
-    display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: center;
-    width: 100%;
-    margin: 0 auto;
   }
-  
-  .app-name {
-    margin: 0;
-  }
-  
+
   .user-actions {
-    display: flex;
+    flex-direction: column;
     align-items: center;
   }
-  
+
   .user-actions span {
-    margin-right: 20px;
+    margin-right: 0;
+    margin-bottom: 10px;
   }
-  
-  .user-actions a, .user-actions button {
-    color: white; /* Ensure link text is white */
-    text-decoration: none;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 10px 20px;
-    border-radius: 4px;
-    transition: background-color 0.3s;
+
+  .user-actions a,
+  .user-actions button {
+    width: 100%;
+    margin-bottom: 10px;
   }
-  
-  .user-actions a:hover, .user-actions button:hover {
-    background-color: #555;
+
+  .user-actions a:last-child,
+  .user-actions button:last-child {
+    margin-bottom: 0;
   }
-  
-  .user-actions a {
-    margin-right: 10px;
-  }
-  
+}
