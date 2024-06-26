@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { collection, getDocs, query, where, setDoc, doc } from 'firebase/firestore';
 import { firestore, auth } from '../firebase';
 import '../styles/UserDashboard.css'; 
 import SlButton from '@shoelace-style/shoelace/dist/react/button';
+import SlSpinner from '@shoelace-style/shoelace/dist/react/spinner';
 
 const UserDashboard = () => {
   const [mcqs, setMcqs] = useState([]);
@@ -10,6 +12,8 @@ const UserDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [responses, setResponses] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchMCQs = async () => {
@@ -37,6 +41,7 @@ const UserDashboard = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
 
     const userId = auth.currentUser ? auth.currentUser.uid : null;
     const userEmail = auth.currentUser ? auth.currentUser.email : null;
@@ -44,6 +49,7 @@ const UserDashboard = () => {
 
     if (!userId || !userEmail) {
       setError('User not authenticated.');
+      setIsSubmitting(false);
       return;
     }
 
@@ -62,10 +68,12 @@ const UserDashboard = () => {
           }
         }
       }
-      alert('Responses submitted successfully!');
+      navigate('/thank-you');
     } catch (error) {
       console.error("Error submitting responses: ", error);
       setError('Failed to submit responses. Please try again.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -113,7 +121,7 @@ const UserDashboard = () => {
           </div>
         )}
         <div className="navigation-buttons">
-          <SlButton variant="danger" type="button" onClick={handlePrevious} disabled={currentQuestionIndex === 0}>
+          <SlButton variant="warning" type="button" onClick={handlePrevious} disabled={currentQuestionIndex === 0}>
             Previous
           </SlButton>
           {currentQuestionIndex < mcqs.length - 1 ? (
@@ -121,8 +129,10 @@ const UserDashboard = () => {
               Next
             </SlButton>
           ) : (
-            <SlButton variant="success" type="submit">
-              Submit
+            <SlButton variant="danger" type="submit" disabled={isSubmitting}>
+              {isSubmitting ? <SlSpinner></SlSpinner>
+
+: ''}        Submit
             </SlButton>
           )}
         </div>
